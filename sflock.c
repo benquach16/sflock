@@ -90,8 +90,10 @@ main(int argc, char **argv) {
 
     // defaults
     char* passchar = "*";
-    char* fontname = "-*-dejavu sans-bold-r-*-*-*-420-100-100-*-*-iso8859-1";
-    char* username = ""; 
+    //char* fontname = "-*-dejavu sans-bold-r-*-*-*-420-100-100-*-*-iso8859-1";
+	char* fontname ="-*-fixed-medium-r-*-*-*-90-100-100-*-*-iso8859-1";
+    char* username = "";
+	char* insult="";
     int showline = 1;
 
     for (int i = 0; i < argc; i++) {
@@ -198,7 +200,7 @@ main(int argc, char **argv) {
     XSync(dpy, False);
     update = True;
     sleepmode = False;
-
+	Bool wrong = False;
     /* main event loop */
     while(running && !XNextEvent(dpy, &ev)) {
         if (sleepmode) {
@@ -224,7 +226,11 @@ main(int argc, char **argv) {
             XDrawString(dpy,w,gc, x, y, passdisp, len);
             update = False;
         }
-
+		if(wrong)
+		{
+		
+			XDrawString(dpy,w,gc, (width - XTextWidth(font,insult,strlen(insult)))/2, height/2-100, insult, strlen(insult));
+		}
         if (ev.type == MotionNotify) {
             sleepmode = False;
         }
@@ -254,8 +260,12 @@ main(int argc, char **argv) {
                     running = strcmp(crypt(passwd, pws), pws);
 #endif
                     if (running != 0)
+					{
                         // change background on wrong password
                         XSetWindowBackground(dpy, w, red.pixel);
+						insult = "get off my computer, motherfucker";
+						wrong = True;
+					}
                     len = 0;
                     break;
                 case XK_Escape:
