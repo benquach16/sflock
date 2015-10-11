@@ -27,6 +27,10 @@
 #include <bsd_auth.h>
 #endif
 
+char *insults[] = { "get off my computer, motherfucker",
+					"you think i have passwords like that, bitch?"};
+int num_insults = 2;
+
 static void
 die(const char *errstr, ...) {
     va_list ap;
@@ -263,7 +267,15 @@ main(int argc, char **argv) {
 					{
                         // change background on wrong password
                         XSetWindowBackground(dpy, w, red.pixel);
+						/*
+						int r = rand()%5;
+						if(r < 2)
 						insult = "get off my computer, motherfucker";
+						else
+						insult = "you think i have passwords like that, bitch?";*/
+						int r = rand()%num_insults;
+						insult = insults[r];
+						
 						wrong = True;
 					}
                     len = 0;
